@@ -1,6 +1,17 @@
 import sequtils
 import strutils
 
+# Opcodes.
+const
+  ADD = 1
+  MUL = 2
+  END = 99
+
+# Operands.
+template op1(ip: int): int = memory[memory[ip + 1]]
+template op2(ip: int): int = memory[memory[ip + 2]]
+template op3(ip: int): int = memory[memory[ip + 3]]
+
 proc update(memory: var seq[int]; noun, verb: int) =
   # Set addresses 1 and 2.
   memory[1] = noun
@@ -8,14 +19,15 @@ proc update(memory: var seq[int]; noun, verb: int) =
   # Run the program.
   var ip = 0
   while true:
-    let op = memory[ip]
-    if op == 99:
+    case  memory[ip]
+    of ADD:
+      op3(ip) = op1(ip) + op2(ip)
+    of MUL:
+      op3(ip) = op1(ip) * op2(ip)
+    of END:
       break # Exit program.
-    let op1 = memory[memory[ip + 1]]
-    let op2 = memory[memory[ip + 2]]
-    if op notin {1, 2}:
+    else:
       raise newException(ValueError, "Invalid opcode")
-    memory[memory[ip + 3]] = if op == 1: op1 + op2 else: op1 * op2
     inc ip, 4
 
 let data = readFile("data").strip().split(',')
