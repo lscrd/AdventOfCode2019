@@ -43,14 +43,14 @@ echo "Part 1: ", memory[0]
 #####################################################################
 # Part 2
 
-const target = 19690720
+const TARGET = 19690720
 var noun, verb = 0
 
 # First, find the noun which works by large steps.
 memory = initialMemory
 while true:
   memory.update(noun, verb)
-  if memory[0] > target:
+  if memory[0] > TARGET:
     dec noun
     break
   memory = initialMemory
@@ -60,7 +60,7 @@ while true:
 memory = initialMemory
 while true:
   memory.update(noun, verb)
-  if memory[0] == target:
+  if memory[0] == TARGET:
     break
   memory = initialMemory
   inc verb
