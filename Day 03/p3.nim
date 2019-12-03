@@ -78,11 +78,11 @@ let intersections = paths[0].points() * paths[1].points()
 ##########################################################################
 # Part 1
 
-var mindest = 1_000_000_000
+var mindist = 1_000_000_000
 for pt in intersections:
-  mindest = min(mindest, pt.distance())
+  mindist = min(mindist, pt.distance())
 
-echo "Part 1: ", mindest
+echo "Part 1: ", mindist
 
 
 ##########################################################################
