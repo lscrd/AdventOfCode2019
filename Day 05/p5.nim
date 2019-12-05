@@ -35,10 +35,14 @@ proc decode(inst: int): tuple[modes: Modes, code: int] =
 ## Run the program.
 proc run(memory: var seq[int]; inputs: varargs[int]): seq[int] =
 
-  # Templates.
+  # Templates to access operands.
   template OP1(): var int = memory.op(ip + 1, modes[1])
   template OP2(): var int = memory.op(ip + 2, modes[2])
   template OP3(): var int = memory.op(ip + 3, modes[3])
+  # Template to make sure that an operand is accessed in position mode.
+  template checkOperandMode(n: int) =
+    if modes[n] != Mode.position:
+      raise newException(ValueError, "Position mode required for operand $1" % $n)
 
   # Execution loop.
   var ip = 0            # Instruction pointer.
@@ -47,12 +51,15 @@ proc run(memory: var seq[int]; inputs: varargs[int]): seq[int] =
     let (modes, code) = memory[ip].decode
     case code
     of ADD:
+      checkOperandMode(3)
       OP3 = OP1 + OP2
       inc ip, 4
     of MUL:
+      checkOperandMode(3)
       OP3 = OP1 * OP2
       inc ip, 4
     of IN:
+      checkOperandMode(1)
       OP1 = inputs[inputIndex]
       inc inputIndex
       inc ip, 2
@@ -64,9 +71,11 @@ proc run(memory: var seq[int]; inputs: varargs[int]): seq[int] =
     of JIF:
       ip = if OP1 == 0: OP2 else: ip + 3
     of LT:
+      checkOperandMode(3)
       OP3 = ord(OP1 < OP2)
       inc ip, 4
     of EQ:
+      checkOperandMode(3)
       OP3 = ord(OP1 == OP2)
       inc ip, 4
     of END:
