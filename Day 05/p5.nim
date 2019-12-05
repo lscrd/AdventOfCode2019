@@ -64,10 +64,10 @@ proc run(memory: var seq[int]; inputs: varargs[int]): seq[int] =
     of JIF:
       ip = if OP1 == 0: OP2 else: ip + 3
     of LT:
-      OP3() = ord(OP1 < OP2)
+      OP3 = ord(OP1 < OP2)
       inc ip, 4
     of EQ:
-      OP3() = ord(OP1 == OP2)
+      OP3 = ord(OP1 == OP2)
       inc ip, 4
     of END:
       break # Exit program.
