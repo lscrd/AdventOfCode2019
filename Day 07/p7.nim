@@ -160,6 +160,7 @@ echo "Part 1: ", bestInput, " -> ", bestOutput
 
 settings = @[5, 6, 7, 8, 9]
 bestOutput = 0
+bestInput = @[]
 var computers: array[5, Computer]
 while true:
   # Initialize computers, launch programs and provide their phase input.
