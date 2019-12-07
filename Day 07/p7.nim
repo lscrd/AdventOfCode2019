@@ -177,6 +177,7 @@ while true:
       break
   if value > bestOutput:
     bestOutput = value
+    bestInput = settings
   if not settings.nextPermutation():
     break
 
