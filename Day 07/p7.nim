@@ -111,13 +111,13 @@ proc run(computer: var Computer) =
     else:
       raise newException(ValueError, "Invalid opcode")
 
-## Provide computer with an input value and continue execution.
+## Provide computer with an input value and resume execution.
 proc giveInput(computer: var Computer; value: int) =
   computer.inputAvailable = true
   computer.input = value
   computer.run()
 
-## Get a value from computer an continue execution.
+## Get a value from computer and resume execution.
 proc takeOutput(computer: var Computer): int =
   assert computer.outputAvailable
   computer.outputAvailable = false
