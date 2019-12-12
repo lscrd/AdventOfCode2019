@@ -104,7 +104,7 @@ while angles.len > 0:
   if n == 200:
     result = pos.x * 100 + pos.y
   # Destroy the asteroid.
-  angles.delete(idx)  # "idx" points now to the next candidate.
+  angles.delete(idx)  # Now "idx" points to next candidate.
   # Skip asteroids with same angle.
   while idx < angles.len and abs(angles[idx].angle - angle) <= EPS:
     inc idx
