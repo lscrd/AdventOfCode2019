@@ -6,7 +6,7 @@ proc update(computer: var Computer; noun, verb: int) =
   computer.memory[1] = noun
   computer.memory[2] = verb
 
-let data = readFile("data").strip().split(',')
+let data = readFile("p2.data").strip().split(',')
 let program = map(data, parseInt)
 
 
