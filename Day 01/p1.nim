@@ -16,8 +16,8 @@ echo "Part 1: ", fuelMass1
 
 ### Part 2 ###
 
-## Compute the fuel mass needed for a module, including the fuel itself.
 proc fuelMass(moduleMass: int): int =
+  ## Compute the fuel mass needed for a module, including the fuel itself.
   var mass = moduleMass div 3 - 2
   while mass > 0:
     result += mass
