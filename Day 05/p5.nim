@@ -1,14 +1,12 @@
-import sequtils
-import strutils
+import std/[sequtils, strutils]
 
 import ../common/intcode
 
-let data = readFile("data").strip().split(',')
+let data = readFile("p5.data").strip().split(',')
 let program = map(data, parseInt)
 
 
-###############################################################################
-# Part 1
+### Part 1 ###
 
 var computer: Computer
 var output: int
@@ -27,8 +25,7 @@ if not computer.halted:
 echo "Part 1: ", output
 
 
-###############################################################################
-# Part 2
+### Part 2 ###
 
 computer.init(program)
 computer.run()
