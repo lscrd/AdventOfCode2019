@@ -1,24 +1,22 @@
-import algorithm
-import sequtils
-import strutils
+import std/[algorithm, sequtils, strutils]
 
 import ../common/intcode
 
-let data = readFile("data").strip().split(',')
+type Phases = array[5, int]
+
+let data = readFile("p7.data").strip().split(',')
 let program = map(data, parseInt)
 
 
-############################################################################
-# Part 1
+### Part 1 ###
 
-var settings = @[0, 1, 2, 3, 4]
+var phases: Phases = [0, 1, 2, 3, 4]
 var bestOutput = 0
-var bestInput: seq[int]
 
 while true:
   # Run programs.
   var value = 0
-  for phase in settings:
+  for phase in phases:
     # Initialize a computer, run program, provide arguments and read output.
     var computer: Computer
     computer.init(program)
@@ -29,24 +27,22 @@ while true:
   # Check output value.
   if value > bestOutput:
     bestOutput = value
-    bestInput = settings
-  if not settings.nextPermutation():
+  if not phases.nextPermutation():
     break
 
-echo "Part 1: ", bestInput, " -> ", bestOutput
+echo "Part 1: ", bestOutput
 
 
 ############################################################################
 # Part 2
 
-settings = @[5, 6, 7, 8, 9]
+phases = [5, 6, 7, 8, 9]
 bestOutput = 0
-bestInput = @[]
 var computers: array[5, Computer]
 
 while true:
   # Initialize computers, launch programs and provide their phase input.
-  for i, phase in settings:
+  for i, phase in phases:
     computers[i].init(program)
     computers[i].run()
     computers[i].giveInput(phase)
@@ -61,8 +57,7 @@ while true:
   # Check output value.
   if value > bestOutput:
     bestOutput = value
-    bestInput = settings
-  if not settings.nextPermutation():
+  if not phases.nextPermutation():
     break
 
-echo "Part 2: ", bestInput, " -> ", bestOutput
+echo "Part 2: ", bestOutput
