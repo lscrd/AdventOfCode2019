@@ -1,18 +1,16 @@
-import sequtils
-import strutils
+import std/[sequtils, strutils]
 
 import ../common/intcode
 
 type Tile {.pure.} = enum Empty, Wall, Block, Paddle, Ball
 
-let data = readFile("data").strip().split(',')
+let data = readFile("p13.data").strip().split(',')
 let program = map(data, parseInt)
 
 var computer: Computer
 
 
-###############################################################################
-# Part 1
+### Part 1 ###
 
 computer.init(program)
 computer.run()
@@ -27,8 +25,7 @@ while not computer.halted:
 echo "Part 1: ", blocks
 
 
-###############################################################################
-# Part 2
+### Part 2 ###
 
 var xBall, xPaddle: int
 var score: int
