@@ -1,7 +1,7 @@
 import std/strutils
 
 var moduleMasses: seq[int]
-for line in "data".lines:
+for line in "p1.data".lines:
   moduleMasses.add line.parseInt()
 
 
