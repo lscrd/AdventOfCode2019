@@ -1,7 +1,6 @@
-from math import lcm
-import strscans
+import std/[math, strscans]
 
-const N = 4   # Number of bodies.
+const N = 4   # Number of moons.
 
 # As there is no interaction between axes, we store all coordinates on an axis first,
 # i.e. we use a tuple (x, y, z) of vectors rather than a vector of tuples (x, y, z).
@@ -11,37 +10,36 @@ type
   Vector = array[N, int]
   Coordinates = tuple[x, y, z: Vector]
 
-# Read iniial positions.
+# Read initial positions.
 var p0: Coordinates
-let lines = readLines("data", N)
+let lines = "p12.data".readLines(N)
 for i, line in lines:
-  if not scanf(line, "<x=$i, y=$i, z=$i>", p0.x[i], p0.y[i], p0.z[i]):
-    quit("Error while scanning line: " & line)
+  if not line.scanf("<x=$i, y=$i, z=$i>", p0.x[i], p0.y[i], p0.z[i]):
+    quit "Error while scanning line: " & line
 
-## Update velocities using positions.
 proc applyGravity(p: Vector; v: var Vector) =
+  ## Update velocities using positions.
   for i in 0..(N - 2):
     for j in (i + 1)..(N - 1):
       let delta = cmp(p[i], p[j])   # "cmp" gives exactly what we need.
       dec v[i], delta
       inc v[j], delta
 
-## Update positions using velocities.
 proc applyVelocity(p: var Vector; v: Vector) =
+  ## Update positions using velocities.
   for i in 0..<N:
     inc p[i], v[i]
 
-## Execute a round, applying gravity then velocity.
 template doRound(p, v: Vector) =
+  ## Execute a round, applying gravity then velocity.
   applyGravity(p, v)
   applyVelocity(p, v)
 
 
-###############################################################################
-# Part 1
+### Part 1 ###
 
-## Run the simulation and return the total energy.
 proc simulate(p0: Coordinates; n: int): int =
+  ## Run the simulation and return the total energy.
   var p = p0
   var v: Coordinates
 
@@ -60,13 +58,12 @@ proc simulate(p0: Coordinates; n: int): int =
 echo "Part 1: ", p0.simulate(1000)
 
 
-###############################################################################
-# Part 2
+### Part 2 ###
 
-const v0 = default(Vector)    # Null velocities.
+let v0 = default(Vector)    # Null velocities.
 
-## Return the cycle length for initial positions "p0" and null velocities.
 proc cycleLength(p0: Vector): int =
+  ## Return the cycle length for initial positions "p0" and null velocities.
   var p = p0
   var v = v0
   while true:
