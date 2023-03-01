@@ -1,65 +1,64 @@
-import sets
-import strutils
-import tables
+import std/[sets, strutils, tables]
 
 type
   Point = tuple[x, y: int]
   Points = HashSet[Point]
-  Direction = enum RIGHT, LEFT, UP, DOWN
+  Direction {.pure.} = enum Right, Left, Up, Down
   Move = tuple[dir: Direction, dist: Natural]
 
 # Mapping from direction letters to direction values.
-const DIRS = {'R': RIGHT, 'L': LEFT, 'U': UP, 'D': DOWN}.toTable()
+const Dirs = {'R': Right, 'L': Left, 'U': Up, 'D': Down}.toTable
 
-## Return the list of points of a path, origin excluded.
 func points(path: seq[Move]): Points =
+  ## Return the list of points of a path, origin excluded.
   var currx, curry = 0
   for move in path:
     case move.dir:
-    of RIGHT:
+    of Right:
       for x in (currx + 1)..(currx + move.dist):
-        result.incl((x, curry))
+        result.incl (x, curry)
       inc currx, move.dist
-    of LEFT:
+    of Left:
       for x in (currx - move.dist)..(currx - 1):
-        result.incl((x, curry))
+        result.incl (x, curry)
       dec currx, move.dist
-    of UP:
+    of Up:
       for y in (curry + 1)..(curry + move.dist):
-        result.incl((currx, y))
+        result.incl (currx, y)
       inc curry, move.dist
-    of DOWN:
+    of Down:
       for y in (curry - move.dist)..(curry - 1):
-        result.incl((currx, y))
+        result.incl (currx, y)
       dec curry, move.dist
 
-## Return the Manhattan distance of a point from the origin.
-func distance(p: Point): int = abs(p.x) + abs(p.y)
+func distance(p: Point): int =
+  ## Return the Manhattan distance of a point from the origin.
+  abs(p.x) + abs(p.y)
 
-## Return the count of steps for a point in a path.
 func stepcount(path: seq[Move]; pt: Point): int =
+  ## Return the count of steps for a point in a path.
   var x, y = 0
   for move in path:
     case move.dir
-    of RIGHT:
+    of Right:
       if y == pt.y and pt.x in x..(x + move.dist):
         inc result, pt.x - x
         return
       inc result, move.dist
       inc x, move.dist
-    of LEFT:
+    of Left:
       if y == pt.y and pt.x in (x - move.dist)..x:
         inc result, x - pt.x
         return
       inc result, move.dist
       dec x, move.dist
-    of UP:
+    of Up:
       if x == pt.x and pt.y in y..(y + move.dist):
         inc result, pt.y - y
         return
       inc result, move.dist
       inc y, move.dist
-    of DOWN:
+    of Down:
       if x == pt.x and pt.y in (y - move.dist)..y:
         inc result, y - pt.y
         return
@@ -68,15 +67,15 @@ func stepcount(path: seq[Move]; pt: Point): int =
 
 # Build the description of the paths.
 var paths: array[2, seq[Move]]    # Paths described as sequences of moves.
-for i, s in readLines("data", 2):
+for i, s in "data".readLines(2):
   for move in s.split(','):
-    paths[i].add((DIRS[move[0]], move[1..^1].parseInt.Natural))
+    paths[i].add (Dirs[move[0]], move[1..^1].parseInt.Natural)
 
 # Find the intersections.
 let intersections = paths[0].points() * paths[1].points()
 
-##########################################################################
-# Part 1
+
+### Part 1 ###
 
 var mindist = 1_000_000_000
 for pt in intersections:
@@ -85,8 +84,7 @@ for pt in intersections:
 echo "Part 1: ", mindist
 
 
-##########################################################################
-# Part 2
+### Part 2 ###
 
 var minsteps = 1_000_000_000
 for pt in intersections:
