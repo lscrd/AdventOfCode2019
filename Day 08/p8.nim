@@ -1,22 +1,21 @@
-import strutils
+import std/[strutils, sugar]
 
 const
-  IMAGE_WIDTH = 25
-  IMAGE_HEIGHT = 6
-  LAYER_SIZE = IMAGE_WIDTH * IMAGE_HEIGHT
+  ImageWidth = 25
+  ImageHeight = 6
+  LayerSize = ImageWidth * ImageHeight
 
-type Color = range['0'..'2']
+type Color = '0'..'2'
 
-let data = readFile("data").strip()
+let data = readFile("p8.data").strip()
 
 # Extract layers from data.
-var layers: seq[string]
-for i in countup(0, data.high, LAYER_SIZE):
-  layers.add(data[i..<(i + LAYER_SIZE)])
+let layers = collect:
+               for i in countup(0, data.high, LayerSize):
+                 data.substr(i, i + (LayerSize - 1))
 
 
-###############################################################################
-# Part 1
+### Part 1 ###
 
 var counts: array[Color, int]     # Counts of '0', '1' and '2'.
 var minCount = 1_000_000_000      # Minimal count of '0'.
@@ -30,11 +29,10 @@ for i in 0..layers.high:
     minCount = counts['0']
     result = counts['1'] * counts['2']
 
-echo "\nPart 1: ", result
+echo "Part 1: ", result
 
 
-###############################################################################
-# Part 2
+### Part 2 ###
 
 var image = newString(layers[0].len)
 
@@ -43,10 +41,10 @@ for i in 0..image.high:
   var color: Color
   for layer in layers:
     color = layer[i]
-    if color != '2': break  # Found white or black.
-  image[i] = if color == '1': '#' else: ' '  # Using '#' for better legibility.
+    if color != '2': break                    # Found white or black.
+  image[i] = if color == '1': '#' else: ' '   # Using '#' for better legibility.
 
 # Display the image.
-echo "\nPart 2:\n"
-for i in countup(0, image.high, IMAGE_WIDTH):
-  echo image[i..<(i + IMAGE_WIDTH)]
+echo "Part 2:\n"
+for i in countup(0, image.high, ImageWidth):
+  echo image[i..<(i + ImageWidth)]
