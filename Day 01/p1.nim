@@ -1,11 +1,11 @@
-import strutils
+import std/strutils
 
 var moduleMasses: seq[int]
 for line in "data".lines:
-  moduleMasses.add(line.parseInt())
+  moduleMasses.add line.parseInt()
 
-########################################################################
-# Part 1
+
+### Part 1 ###
 
 var fuelMass1 = 0
 for moduleMass in moduleMasses:
@@ -13,8 +13,8 @@ for moduleMass in moduleMasses:
 
 echo "Part 1: ", fuelMass1
 
-########################################################################
-# Part 2
+
+### Part 2 ###
 
 ## Compute the fuel mass needed for a module, including the fuel itself.
 proc fuelMass(moduleMass: int): int =
