@@ -67,7 +67,7 @@ func stepcount(path: seq[Move]; pt: Point): int =
 
 # Build the description of the paths.
 var paths: array[2, seq[Move]]    # Paths described as sequences of moves.
-for i, s in "data".readLines(2):
+for i, s in "p3.data".readLines(2):
   for move in s.split(','):
     paths[i].add (Dirs[move[0]], move[1..^1].parseInt.Natural)
 
