@@ -1,5 +1,4 @@
-import strutils
-import tables
+import std/[strutils, tables]
 
 # Description of orbit objects.
 type OrbitObject = ref object
@@ -12,33 +11,32 @@ type OrbitObject = ref object
 type ObjectTable = Table[string, OrbitObject]
 var objects: ObjectTable
 
-## Get an object from its name, creating it if it doesn't exist.
 proc get(objects: var ObjectTable; name: string): OrbitObject =
+  ## Get an object from its name, creating it if it doesn't exist.
   if name in objects:
     result = objects[name]
   else:
     result = OrbitObject(name: name)
     objects[name] = result
 
-## Set the orbiting depth of objects starting from "obj".
 proc setOrbitingDepths(obj: OrbitObject; depth = 0) =
+  ## Set the orbiting depth of objects starting from "obj".
   obj.depth = depth
   for next in obj.children:
     next.setOrbitingDepths(depth + 1)
 
 # Build the objects and the mapping table.
-for line in "data".lines:
+for line in "p6.data".lines:
   let names = line.split(')')
   let obj1 = objects.get(names[0])
   let obj2 = objects.get(names[1])
-  obj1.children.add(obj2)
+  obj1.children.add obj2
   obj2.parent = obj1
 
 objects["COM"].setOrbitingDepths()
 
 
-###############################################################################
-# Part 1
+### Part 1 ###
 
 # Count of orbits is simply the sum of orbiting depths.
 var count = 0
@@ -48,15 +46,14 @@ for obj in objects.values():
 echo "Part 1: ", count
 
 
-###############################################################################
-# Part 2
+### Part 2 ###
 
-## Build the list of objects around which "obj" is orbiting,
-## from the nearest to the farthest
 proc orbitingList(obj: OrbitObject): seq[OrbitObject] =
+  ## Build the list of objects around which "obj" is orbiting,
+  ## from the nearest to the farthest.
   var obj = obj.parent
   while not obj.isNil:
-    result.add(obj)
+    result.add obj
     obj = obj.parent
 
 let olist1 = objects["YOU"].orbitingList()
